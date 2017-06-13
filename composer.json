@@ -1,0 +1,12 @@
+{
+    "name": "sircortly/formstack-assignment",
+    "description": "A small framework to manage the creating, reading, updating, and deleting of Users",
+    "type": "project",
+    "authors": [
+        {
+            "name": "sircortly",
+            "email": "lyons.cort@gmail.com"
+        }
+    ],
+    "require": {}
+}
