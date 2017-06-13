@@ -8,5 +8,8 @@
             "email": "lyons.cort@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "robmorgan/phinx": "^0.8.1",
+        "vlucas/phpdotenv": "^2.4"
+    }
 }
