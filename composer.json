@@ -11,5 +11,8 @@
     "require": {
         "robmorgan/phinx": "^0.8.1",
         "vlucas/phpdotenv": "^2.4"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "^1.6"
     }
 }
