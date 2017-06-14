@@ -7,12 +7,12 @@ use \Psr\Http\Message\ResponseInterface as Response;
 (new \Dotenv\Dotenv(BASE_PATH))->load();
 
 // Instantiate Slim App
-$settings = require './src/settings.php';
+$settings =  require(BASE_PATH . '/src/settings.php');
 $app = new \Slim\App($settings);
 
-$app->get('/', function (Request $request, Response $response) {
-    $response->getBody()->write('Slim Application');
-    return $response;
-});
+// Register Routes
+require BASE_PATH . '/src/routes.php';
+
+// Run Application
 $app->run();
 
