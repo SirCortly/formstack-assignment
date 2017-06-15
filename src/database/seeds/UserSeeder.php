@@ -1,38 +1,53 @@
 <?php
 
 use Phinx\Seed\AbstractSeed;
-use Faker\Factory as Faker;
 
 class UserSeeder extends AbstractSeed
 {
     /**
      * Run Method.
      *
-     * Write your database seeder using this method.
-     *
-     * More information on writing seeders is available here:
-     * http://docs.phinx.org/en/latest/seeding.html
+     * Seed users table with test data
      */
     public function run()
     {
-        $faker = Faker::create();
-
         // Make sure we truncate before reseeding
         $users = $this->table('users');
         $users->truncate();
 
-        $data = [];
-        for ($i = 0; $i < 30; $i++) {
-            $data[] = [
-                'email' => $faker->email,
-                'password' => password_hash($faker->password, PASSWORD_DEFAULT),
-                'firstname' => $faker->firstName,
-                'lastname' => $faker->lastName,
+        $data = [
+            [
+                'email' => 'john.lennon@beatles.com',
+                'password' => password_hash('john', PASSWORD_DEFAULT),
+                'firstname' => 'John',
+                'lastname' => 'Lennon',
                 'created_at' => date('Y-m-d H:i:s')
-            ];
-        }
+            ],
+            [
+                'email' => 'george.harrison@beatles.com',
+                'password' => password_hash('george', PASSWORD_DEFAULT),
+                'firstname' => 'George',
+                'lastname' => 'Harrison',
+                'created_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'email' => 'paul.mcartney@beatles.com',
+                'password' => password_hash('paul', PASSWORD_DEFAULT),
+                'firstname' => 'Paul',
+                'lastname' => 'Mcartney',
+                'created_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'email' => 'ringo.starr@beatles.com',
+                'password' => password_hash('ringo', PASSWORD_DEFAULT),
+                'firstname' => 'Ringo',
+                'lastname' => 'Starr',
+                'created_at' => date('Y-m-d H:i:s')
+            ]
+        ];
 
         $users->insert($data)
             ->save();
     }
 }
+
