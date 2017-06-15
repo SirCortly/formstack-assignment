@@ -1,6 +1,5 @@
 <?php
 
-$app->get('/', function($request, $response) {
-    $response->getBody()->write('Slim App');
-    return $response;
-});
+use App\Users\UsersController;
+
+$app->get('/users', UsersController::class . ':index');

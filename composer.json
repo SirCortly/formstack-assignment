@@ -17,6 +17,11 @@
         "fzaninotto/faker": "^1.6",
         "phpunit/phpunit": "^6.1"
     },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
     "scripts": {
         "rollback": "vendor/bin/phinx rollback",
         "migrate": "vendor/bin/phinx migrate",
