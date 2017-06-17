@@ -38,6 +38,20 @@ abstract class DataMapper
     }
 
     /**
+     * Get all instances of DomainObject type
+     *
+     * @return DomainObject[]
+     */
+    abstract public function fetchAll() : array;
+
+    /**
+     * Get a specific instance of DomainObject by ID
+     *
+     * @return DomainObject
+     */
+    abstract public function fetchById(int $id) : DomainObject;
+
+    /**
      * Delete object from storage
      *
      * @param DomainObject $entity Object to delete
