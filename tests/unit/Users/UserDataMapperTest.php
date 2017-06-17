@@ -90,6 +90,38 @@ class UserDataMapperTest extends TestCase
     }
 
     /**
+     * Test get User by ID
+     */
+    public function testFetchById()
+    {
+        $mapper = new UserDataMapper($this->pdo);
+
+        // Fetch first test fixture
+        $user = $mapper->fetchById(1);
+
+        // Assert User fields reflect fixture data
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($this->fixtures[0]['email'], $user->getEmail());
+        $this->assertEquals($this->fixtures[0]['password'], $user->getPassword());
+        $this->assertEquals($this->fixtures[0]['firstname'], $user->getFirstname());
+        $this->assertEquals($this->fixtures[0]['lastname'], $user->getLastname());
+    }
+
+    /**
+     * Test that exception is thrown if we try to fetch a
+     * User by ID that doesn't exist.
+     */
+    public function testFetchByIdNotFoundThrowsException()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('User not found');
+
+        $mapper = new UserDataMapper($this->pdo);
+
+        $user = $mapper->fetchById(123);
+    }
+
+    /**
      * Test create new User
      */
     public function testCreate()
