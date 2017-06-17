@@ -67,6 +67,30 @@ class UserDataMapperTest extends TestCase
     }
 
     /**
+     * Test get all Users
+     */
+    public function testFetchAll()
+    {
+        $mapper = new UserDataMapper($this->pdo);
+
+        $users = $mapper->fetchAll();
+
+        // We should recieve a User for each of our fixtures
+        $this->assertCount(sizeof($this->fixtures), $users);
+
+        // Verify that each User matches fixture
+        foreach ($users as $index => $user) {
+            $this->assertInstanceOf(User::class);
+
+            $this->assertEquals($this->fixtures[$index]['email'], $user->getEmail());
+            $this->assertEquals($this->fixtures[$index]['password'], $user->getPassword());
+            $this->assertEquals($this->fixtures[$index]['firstname'], $user->getFirstname());
+            $this->assertEquals($this->fixtures[$index]['lastname'], $user->getLastname());
+            $this->assertNull($this->fixtures[$index]['lastname'], $user->getLastname());
+        }
+    }
+
+    /**
      * Test create new User
      */
     public function testCreate()
