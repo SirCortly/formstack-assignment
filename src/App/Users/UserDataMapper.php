@@ -74,7 +74,19 @@ class UserDataMapper extends DataMapper
      */
     public function delete(DomainObject $user)
     {
-        return true;
+        if (is_null($user->getId())) {
+            throw new \Exception('Cannot delete user where ID is null');
+        }
+
+        $stmt = $this->db->prepare("
+            DELETE FROM `users` WHERE id = ?
+        ");
+        $stmt->execute([$user->getId()]);
+
+        // ID was not found. Nothing was deleted.
+        if ( ! $stmt->rowCount()) {
+            throw new \Exception('Cannot delete User who does not exist');
+        }
     }
 
     /**
