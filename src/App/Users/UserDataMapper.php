@@ -26,7 +26,21 @@ class UserDataMapper extends DataMapper
      */
     protected function _create(DomainObject $user) : int
     {
-        return 101;
+        $stmt = $this->db->prepare("
+            INSERT INTO `users` (
+                `email`, `password`, `firstname`, `lastname`, `created_at`
+            )
+            VALUES (:email, :password, :firstname, :lastname, NOW());
+        ");
+
+        $data = [
+            ':email' => $user->getEmail(),
+            ':password' => $user->getPassword(),
+            ':firstname' => $user->getFirstname(),
+            ':lastname' => $user->getLastname()
+        ];
+        $stmt->execute($data);
+        return $this->db->lastInsertId();
     }
 
     /**

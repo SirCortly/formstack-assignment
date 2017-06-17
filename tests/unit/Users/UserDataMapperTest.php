@@ -51,7 +51,7 @@ class UserDataMapperTest extends TestCase
     public function testCreate()
     {
         $user = new User();
-        $mapper = new UserDataMapper();
+        $mapper = new UserDataMapper($this->pdo);
 
         // Initialize User
         $user->setEmail('newUser@email.com');
@@ -72,10 +72,12 @@ class UserDataMapperTest extends TestCase
         $this->assertCount($this->num_fixtures + 1, $result);
 
         // Assert record came back with proper fields
-        $record = $result[$this->num_fixtures + 1];
+        $record = $result[$this->num_fixtures];
         $this->assertEquals($record['email'], 'newUser@email.com');
-        $this->assertEquals($record['password'], 'newUser');
+        $this->assertEquals($record['password'], 'newuser');
         $this->assertEquals($record['firstname'], 'New');
         $this->assertEquals($record['lastname'], 'User');
+        $this->assertTrue( ! is_null($record['created_at']));
+        $this->assertNull($record['updated_at']);
     }
 }
