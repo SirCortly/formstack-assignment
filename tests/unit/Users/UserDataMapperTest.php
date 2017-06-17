@@ -80,13 +80,12 @@ class UserDataMapperTest extends TestCase
 
         // Verify that each User matches fixture
         foreach ($users as $index => $user) {
-            $this->assertInstanceOf(User::class);
+            $this->assertInstanceOf(User::class, $user);
 
             $this->assertEquals($this->fixtures[$index]['email'], $user->getEmail());
             $this->assertEquals($this->fixtures[$index]['password'], $user->getPassword());
             $this->assertEquals($this->fixtures[$index]['firstname'], $user->getFirstname());
             $this->assertEquals($this->fixtures[$index]['lastname'], $user->getLastname());
-            $this->assertNull($this->fixtures[$index]['lastname'], $user->getLastname());
         }
     }
 

@@ -1,7 +1,9 @@
 <?php
 namespace App\Users;
 
+use PDO;
 use App\{DomainObject, DataMapper};
+use App\Users\User;
 
 class UserDataMapper extends DataMapper
 {
@@ -12,7 +14,23 @@ class UserDataMapper extends DataMapper
      */
     public function fetchAll() : array
     {
-        return [];
+        // Grab all rows from users table
+        $results = $this->db->query("
+            SELECT
+                `id`,
+                `email`,
+                `password`,
+                `firstname`,
+                `lastname`,
+                `created_at`,
+                `updated_at`
+            FROM `users`
+        ")->fetchAll(PDO::FETCH_ASSOC);
+
+        // Map results into array of User objects
+        return array_map(function($result) {
+            return $this->_populate($result);
+        }, $results);
     }
 
     /**
@@ -75,5 +93,24 @@ class UserDataMapper extends DataMapper
     protected function _update(DomainObject $user) : int
     {
         return 102;
+    }
+
+    /**
+     * Turn a data array into a User object
+     *
+     * @param array $row Array corresponding to MysQL row
+     *
+     * @return User
+     */
+    private function _populate(array $row) : User
+    {
+        $user = new User();
+
+        $user->setEmail($row['email']);
+        $user->setPassword($row['password']);
+        $user->setFirstname($row['firstname']);
+        $user->setLastname($row['lastname']);
+
+        return $user;
     }
 }
