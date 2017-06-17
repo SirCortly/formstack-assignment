@@ -126,6 +126,7 @@ class UserDataMapper extends DataMapper
     {
         $user = new User();
 
+        $user->setId($row['id']);
         $user->setEmail($row['email']);
         $user->setPassword($row['password']);
         $user->setFirstname($row['firstname']);
