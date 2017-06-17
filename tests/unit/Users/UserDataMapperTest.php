@@ -171,6 +171,7 @@ class UserDataMapperTest extends TestCase
 
         $user = $mapper->fetchById(1);
 
+        // Update User fields
         $user->setEmail('new@email.com');
         $user->setPassword('newpass');
         $user->setFirstname('New');
@@ -182,6 +183,7 @@ class UserDataMapperTest extends TestCase
             SELECT * FROM users WHERE id = 1
         ")->fetch(PDO::FETCH_ASSOC);
 
+        // Assert that user fields have been updated in DB
         $this->assertEquals(1, $row['id']);
         $this->assertEquals('new@email.com', $row['email']);
         $this->assertEquals('newpass', $row['password']);
@@ -189,5 +191,57 @@ class UserDataMapperTest extends TestCase
         $this->assertEquals('Name', $row['lastname']);
         $this->assertTrue( ! is_null($row['created_at']));
         $this->assertTrue( ! is_null($row['updated_at']));
+    }
+
+    /**
+     * Test Delete User
+     */
+    public function testDelete()
+    {
+        $mapper = new UserDataMapper($this->pdo);
+        $user = $mapper->fetchById(1);
+
+        $mapper->delete($user);
+
+        $results = $this->pdo->query("
+            SELECT *
+            FROM `users`
+        ")->fetchAll(PDO::FETCH_ASSOC);
+
+        // Assert that User with ID 1 has been deleted
+        $this->assertCount(sizeof($this->fixtures) - 1, $results);
+        $this->assertTrue( ! in_array(1, array_map(function($result) {
+            return $result['id'];
+        }, $results)));
+    }
+
+    /**
+     * Test that attempting to delete a User whos Id is null throws exception
+     */
+    public function testDeleteUserNullIdThrowsException()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot delete user where ID is null');
+
+        $mapper = new UserDataMapper($this->pdo);
+
+        $user = new User();
+        $mapper->delete($user);
+    }
+
+    /**
+     * Test that attempting to delete a User who does not exist throws an exception
+     */
+    public function testDeleteUserWhoDoesNotExistThrowsException()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot delete User who does not exist');
+
+        $mapper = new UserDataMapper($this->pdo);
+
+        $user = new User();
+        $user->setId(123);
+
+        $mapper->delete($user);
     }
 }
