@@ -6,6 +6,28 @@ use App\{DomainObject, DataMapper};
 class UserDataMapper extends DataMapper
 {
     /**
+     * Fetch All Users
+     *
+     * @return User[]
+     */
+    public function fetchAll() : array
+    {
+        return [];
+    }
+
+    /**
+     * Fetch a single User by ID
+     *
+     * @param int $id Id of User
+     *
+     * @return DomainObject
+     */
+    public function fetchById(int $id) : DomainObject
+    {
+        return new User();
+    }
+
+    /**
      * Delete User
      *
      * @param DomainObject $user User to delete
