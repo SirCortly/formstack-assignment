@@ -187,7 +187,7 @@ class UserDataMapperTest extends TestCase
         $this->assertEquals('newpass', $row['password']);
         $this->assertEquals('New', $row['firstname']);
         $this->assertEquals('Name', $row['lastname']);
-        $this->assertTrue( ! is_null($record['created_at']));
-        $this->assertTrue( ! is_null($record['updated_at']));
+        $this->assertTrue( ! is_null($row['created_at']));
+        $this->assertTrue( ! is_null($row['updated_at']));
     }
 }

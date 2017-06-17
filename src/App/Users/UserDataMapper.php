@@ -100,6 +100,7 @@ class UserDataMapper extends DataMapper
             ':lastname' => $user->getLastname()
         ];
         $stmt->execute($data);
+
         return $this->db->lastInsertId();
     }
 
@@ -112,7 +113,27 @@ class UserDataMapper extends DataMapper
      */
     protected function _update(DomainObject $user) : int
     {
-        return 102;
+        $stmt = $this->db->prepare("
+            UPDATE `users`
+            SET
+                `email` = :email,
+                `password` = :password,
+                `firstname` = :firstname,
+                `lastname` = :lastname,
+                `updated_at` = NOW()
+            WHERE id = :id;
+        ");
+
+        $data = [
+            ':id' => $user->getId(),
+            ':email' => $user->getEmail(),
+            ':password' => $user->getPassword(),
+            ':firstname' => $user->getFirstname(),
+            ':lastname' => $user->getLastname()
+        ];
+        $stmt->execute($data);
+
+        return $user->getId();
     }
 
     /**
