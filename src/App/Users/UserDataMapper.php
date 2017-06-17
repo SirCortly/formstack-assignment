@@ -8,6 +8,21 @@ use App\Users\User;
 class UserDataMapper extends DataMapper
 {
     /**
+     * @var string Basic SELECT FROM query for users
+     */
+    private $select_from = "
+        SELECT
+            `id`,
+            `email`,
+            `password`,
+            `firstname`,
+            `lastname`,
+            `created_at`,
+            `updated_at`
+        FROM `users`
+    ";
+
+    /**
      * Fetch All Users
      *
      * @return User[]
@@ -15,17 +30,8 @@ class UserDataMapper extends DataMapper
     public function fetchAll() : array
     {
         // Grab all rows from users table
-        $results = $this->db->query("
-            SELECT
-                `id`,
-                `email`,
-                `password`,
-                `firstname`,
-                `lastname`,
-                `created_at`,
-                `updated_at`
-            FROM `users`
-        ")->fetchAll(PDO::FETCH_ASSOC);
+        $results = $this->db->query($this->select_from)
+            ->fetchAll(PDO::FETCH_ASSOC);
 
         // Map results into array of User objects
         return array_map(function($result) {
@@ -42,7 +48,21 @@ class UserDataMapper extends DataMapper
      */
     public function fetchById(int $id) : DomainObject
     {
-        return new User();
+        // Append WHERE clause to $this->select_from and execute query
+        $stmt = $this->db->prepare(
+            $this->select_from . 'WHERE id = ?'
+        );
+        $stmt->execute([$id]);
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // If ID was not found, throw Exception
+        if ( ! $result) {
+            throw new \Exception('User not found');
+        }
+
+        // Return User object
+        return $this->_populate($result);
     }
 
     /**
