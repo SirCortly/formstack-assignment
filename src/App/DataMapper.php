@@ -4,6 +4,21 @@ namespace App;
 abstract class DataMapper
 {
     /**
+     * PDO connection
+     */
+    protected $db;
+
+    /**
+     * Constructor
+     *
+     * @param PDO $db PDO connection
+     */
+    public function __construct(\PDO $db)
+    {
+        $this->db = $db;
+    }
+
+    /**
      * Persist DomainObject to storage
      *
      * Determine whether an object should be created or updated
