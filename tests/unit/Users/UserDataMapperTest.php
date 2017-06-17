@@ -60,7 +60,7 @@ class UserDataMapperTest extends TestCase
         $user->setLastname('User');
 
         // Persist new User
-        $mapper->save($user);
+        $id = $mapper->save($user);
 
         // Fetch result
         $result = $this->pdo->query("
@@ -70,6 +70,9 @@ class UserDataMapperTest extends TestCase
 
         // We should have num_fixtures + 1 records
         $this->assertCount($this->num_fixtures + 1, $result);
+
+        // Id should corespond with num_fixtures
+        $this->assertEquals($this->num_fixtures, $id);
 
         // Assert record came back with proper fields
         $record = $result[$this->num_fixtures];
