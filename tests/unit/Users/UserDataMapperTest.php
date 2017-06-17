@@ -82,6 +82,7 @@ class UserDataMapperTest extends TestCase
         foreach ($users as $index => $user) {
             $this->assertInstanceOf(User::class, $user);
 
+            $this->assertEquals($index + 1, $user->getId());
             $this->assertEquals($this->fixtures[$index]['email'], $user->getEmail());
             $this->assertEquals($this->fixtures[$index]['password'], $user->getPassword());
             $this->assertEquals($this->fixtures[$index]['firstname'], $user->getFirstname());
@@ -101,6 +102,7 @@ class UserDataMapperTest extends TestCase
 
         // Assert User fields reflect fixture data
         $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals(1, $user->getId());
         $this->assertEquals($this->fixtures[0]['email'], $user->getEmail());
         $this->assertEquals($this->fixtures[0]['password'], $user->getPassword());
         $this->assertEquals($this->fixtures[0]['firstname'], $user->getFirstname());
@@ -158,5 +160,34 @@ class UserDataMapperTest extends TestCase
         $this->assertEquals($record['lastname'], 'User');
         $this->assertTrue( ! is_null($record['created_at']));
         $this->assertNull($record['updated_at']);
+    }
+
+    /**
+     * Test update existing User
+     */
+    public function testUpdate()
+    {
+        $mapper = new UserDataMapper($this->pdo);
+
+        $user = $mapper->fetchById(1);
+
+        $user->setEmail('new@email.com');
+        $user->setPassword('newpass');
+        $user->setFirstname('New');
+        $user->setLastname('Name');
+
+        $id = $mapper->save($user);
+
+        $row = $this->pdo->query("
+            SELECT * FROM users WHERE id = 1
+        ")->fetch(PDO::FETCH_ASSOC);
+
+        $this->assertEquals(1, $row['id']);
+        $this->assertEquals('new@email.com', $row['email']);
+        $this->assertEquals('newpass', $row['password']);
+        $this->assertEquals('New', $row['firstname']);
+        $this->assertEquals('Name', $row['lastname']);
+        $this->assertTrue( ! is_null($record['created_at']));
+        $this->assertTrue( ! is_null($record['updated_at']));
     }
 }
