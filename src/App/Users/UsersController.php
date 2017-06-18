@@ -132,6 +132,33 @@ class UsersController extends AbstractController
     }
 
     /**
+     *  DELETE /users/{id}
+     *
+     * Delete User
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param array $args
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function delete(Request $request, Response $response, $args)
+    {
+        $id = $args['id'];
+        $mapper = new UserDataMapper($this->container->get('db'));
+
+        try {
+            $user = $mapper->fetchById($id);
+        } catch(\Exception $e) {
+            return $response->withJson(['message' => $e->getMessage()], 404);
+        }
+
+        $mapper->delete($user);
+        return $response->withStatus(200);
+    }
+
+
+    /**
      * Populate User based on request body
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
