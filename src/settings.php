@@ -1,8 +1,8 @@
 <?php
-
 /**
  * Slim Application Config
  */
+
 return [
     'settings' => [
         'displayErrorDetails' => getenv('ENV') === 'development' ? true : false,

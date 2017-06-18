@@ -1,5 +1,6 @@
 <?php
-
-use App\Users\UsersController;
+/**
+ * Application Routes
+ */
 
 $app->get('/users', UsersController::class . ':index');
