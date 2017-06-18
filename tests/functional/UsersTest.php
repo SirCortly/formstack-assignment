@@ -303,4 +303,52 @@ class UsersTest extends TestCase
             $this->assertEquals($error_expectation, $error);
         }
     }
+
+    /**
+     * Test DELETE /users/{id}
+     */
+    public function testDelete()
+    {
+        // DELETE /users/1
+        $response = $this->http->delete('/users/1');
+        $this->assertEquals(200, $response->getStatusCode());
+
+        // GET /users/1 no longer exists
+        try {
+            $this->http->get('/users/1');
+        } catch (GuzzleHttp\Exception\ClientException $e) {
+            $response = $e->getResponse();
+
+            $this->assertEquals(404, $response->getStatusCode());
+
+            $error = json_decode($response->getBody(), true);
+            $error_expectation = [
+                'message' => 'User not found'
+            ];
+
+            $this->assertEquals($error_expectation, $error);
+        }
+    }
+
+    /**
+     * Test DELETE /users/{id} not found returns 404
+     */
+    public function testDeleteNotFound()
+    {
+        // DELETE /users/123 Does not exist
+        try {
+            $this->http->delete('/users/123');
+        } catch (GuzzleHttp\Exception\ClientException $e) {
+            $response = $e->getResponse();
+
+            $this->assertEquals(404, $response->getStatusCode());
+
+            $error = json_decode($response->getBody(), true);
+            $error_expectation = [
+                'message' => 'User not found'
+            ];
+
+            $this->assertEquals($error_expectation, $error);
+        }
+    }
 }
