@@ -70,7 +70,7 @@ class UsersController
         try {
             $user = $this->user_mapper->fetchById($id);
         } catch(\Exception $e) {
-            return $response->withJson(['message' => $e->getMessage()], 404);
+            return $response->withJson(['message' => 'User not found'], 404);
         }
 
         return $response->withJson(
