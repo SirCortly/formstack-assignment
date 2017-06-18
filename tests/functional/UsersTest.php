@@ -208,6 +208,7 @@ class UsersTest extends TestCase
 
         // POST /users
         $response = $this->http->post('/users', ['json' => $post_data]);
+        $data = json_decode($response->getBody(), true);
 
         // Assert response 201 Created
         $this->assertEquals(201, $response->getStatusCode());
@@ -227,5 +228,29 @@ class UsersTest extends TestCase
         $this->assertEquals('Kurt Cobain', $data['fullname']);
         $this->assertFalse(is_null($data['created_at']));
         $this->assertTrue(is_null($data['updated_at']));
+    }
+
+    /**
+     * Test POSTing user with empty body returns error
+     */
+    public function testPostUserMissingParams()
+    {
+        try {
+            $this->http->post('/users', []);
+        } catch (GuzzleHttp\Exception\ClientException $e) {
+            $response = $e->getResponse();
+
+            $this->assertEquals(422, $response->getStatusCode());
+
+            $error = json_decode($response->getBody(), true);
+            $error_expectation = [
+                'email' => 'Email is required',
+                'password' => 'Password is required',
+                'firstname' => 'Firstname is required',
+                'lastname' => 'Lastname is required',
+            ];
+
+            $this->assertEquals($error_expectation, $error);
+        }
     }
 }
