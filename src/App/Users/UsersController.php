@@ -72,15 +72,8 @@ class UsersController extends AbstractController
      */
     public function create(Request $request, Response $response)
     {
-        $data = $request->getParsedBody();
         $mapper = new UserDataMapper($this->container->get('db'));
-
-        // Create and populate new User
-        $user = new User();
-        isset($data['email']) ? $user->setEmail($data['email']) : '';
-        isset($data['password']) ? $user->setPassword($data['password']) : '';
-        isset($data['firstname']) ? $user->setFirstname($data['firstname']) : '';
-        isset($data['lastname']) ? $user->setLastname($data['lastname']) : '';
+        $user = $this->_populateUserFromRequestBody($request, new User());
 
         $validation_errors = $user->validate();
         if ($validation_errors) {
@@ -98,5 +91,61 @@ class UsersController extends AbstractController
             $transformer->transform($mapper->fetchById($id)),
             201
         );
+    }
+
+    /**
+     *  PUT /users/{id}
+     *
+     * Update User
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param array $args
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function update(Request $request, Response $response, $args)
+    {
+        $id = $args['id'];
+        $mapper = new UserDataMapper($this->container->get('db'));
+
+        try {
+            $user = $mapper->fetchById($id);
+        } catch(\Exception $e) {
+            return $response->withJson(['message' => $e->getMessage()], 404);
+        }
+
+        // Update user based on request body
+        $user = $this->_populateUserFromRequestBody($request, $user);
+
+        $validation_errors = $user->validate();
+        if ($validation_errors) {
+            return $response->withJson(
+                $validation_errors,
+                422
+            );
+        }
+
+        $mapper->save($user);
+
+        return $response->withStatus(200);
+    }
+
+    /**
+     * Populate User based on request body
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param User $user
+     */
+    private function _populateUserFromRequestBody(Request $request, User $user)
+    {
+        $data = $request->getParsedBody();
+
+        isset($data['email']) ? $user->setEmail($data['email']) : '';
+        isset($data['password']) ? $user->setPassword($data['password']) : '';
+        isset($data['firstname']) ? $user->setFirstname($data['firstname']) : '';
+        isset($data['lastname']) ? $user->setLastname($data['lastname']) : '';
+
+        return $user;
     }
 }
