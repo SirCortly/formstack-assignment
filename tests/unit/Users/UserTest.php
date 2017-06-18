@@ -79,7 +79,7 @@ class UserTest extends TestCase
         $user->setEmail('kurt@russell.com');
         $user->setPassword('wherewereyouchilds');
         $user->setFirstname('Kurt');
-        $user->setFirstname('Russell');
+        $user->setLastname('Russell');
 
         $validation_errors = $user->validate();
 
@@ -95,7 +95,7 @@ class UserTest extends TestCase
         $user->setEmail('kurtrussell.com');
         $user->setPassword('wherewereyouchilds');
         $user->setFirstname('Kurt');
-        $user->setFirstname('Russell');
+        $user->setLastname('Russell');
 
         $validation_errors = $user->validate();
 

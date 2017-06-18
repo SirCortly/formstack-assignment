@@ -26,6 +26,43 @@ class User extends DomainObject
     protected $lastname;
 
     /**
+     * Determine whether or not user is in a valid state
+     *
+     * @return array Validation Errors
+     */
+    public function validate() : array
+    {
+        $errors = [];
+
+        // Valiadate Email
+        if ( ! filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            if (is_null($this->email)) {
+                $errors['email'] = 'Email is required';
+            }
+            else {
+                $errors['email'] = 'Email format is invalid';
+            }
+        }
+
+        // Validate Password
+        if (is_null($this->password)) {
+            $errors['password'] = 'Password is required';
+        }
+
+        // Validate Firstname
+        if (is_null($this->firstname)) {
+            $errors['firstname'] = 'Firstname is required';
+        }
+
+        // Validate Lastname
+        if (is_null($this->lastname)) {
+            $errors['lastname'] = 'Lastname is required';
+        }
+
+        return $errors;
+    }
+
+    /**
      * Get Email
      *
      * @return string $email
