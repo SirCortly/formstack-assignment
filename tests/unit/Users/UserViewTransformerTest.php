@@ -7,6 +7,8 @@ class UserViewTransformerTest extends TestCase
 {
     /**
      * Test transform method
+     *
+     * @covers \App\Users\UserViewTransformer::transform
      */
     public function testTransform()
     {

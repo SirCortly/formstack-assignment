@@ -7,6 +7,9 @@ class UserTest extends TestCase
 {
     /**
      * Test $email setters and getters
+     *
+     * @covers \App\Users\User::setEmail
+     * @covers \App\Users\User::getEmail
      */
     public function testSetGetEmail()
     {
@@ -20,6 +23,9 @@ class UserTest extends TestCase
 
     /**
      * Test $password setters and getters
+     *
+     * @covers \App\Users\User::setPassword
+     * @covers \App\Users\User::getPassword
      */
     public function testSetGetPassword()
     {
@@ -33,6 +39,9 @@ class UserTest extends TestCase
 
     /**
      * Test $firstname setters and getters
+     *
+     * @covers \App\Users\User::setFirstname
+     * @covers \App\Users\User::getFirstname
      */
     public function testSetGetFirstname()
     {
@@ -46,6 +55,9 @@ class UserTest extends TestCase
 
     /**
      * Test $lastname setters and getters
+     *
+     * @covers \App\Users\User::setLastname
+     * @covers \App\Users\User::getLastname
      */
     public function testSetGetlastname()
     {
@@ -59,6 +71,8 @@ class UserTest extends TestCase
 
     /**
      * Test $user->getFullName() returns "Firstname Lastname"
+     *
+     * @covers \App\Users\User::getFullName
      */
     public function testGetFullName()
     {
@@ -72,6 +86,8 @@ class UserTest extends TestCase
 
     /**
      * Test that validation returns empty array on valid User
+     *
+     * @covers \App\Users\User::validate
      */
     public function testValidateSuccess()
     {
@@ -88,6 +104,8 @@ class UserTest extends TestCase
 
     /**
      * Test that validation returns errors on invalid email
+     *
+     * @covers \App\Users\User::validate
      */
     public function testValidateInvalidEmail()
     {
@@ -106,6 +124,8 @@ class UserTest extends TestCase
 
     /**
      * Test that validation returns errors when required fields are missing
+     *
+     * @covers \App\Users\User::validate
      */
     public function testValidateRequiredFields()
     {

@@ -7,6 +7,8 @@ class AbstractDomainObjectTest extends TestCase
 {
     /**
      * Test that object is initialized with $id = null;
+     *
+     * @covers \App\AbstractDomainObject::getId
      */
     public function testIdInitiallyNull()
     {
@@ -17,6 +19,9 @@ class AbstractDomainObjectTest extends TestCase
 
     /**
      * Test that setter and getter for $id function properly
+     *
+     * @covers \App\AbstractDomainObject::getId
+     * @covers \App\AbstractDomainObject::setId
      */
     public function testSetGetID()
     {
@@ -28,6 +33,8 @@ class AbstractDomainObjectTest extends TestCase
 
     /**
      * Test that an exception is thrown if we try to set an $id that is not null
+     *
+     * @covers \App\AbstractDomainObject::setId
      */
     public function testSetExistingIdThrowsException()
     {
@@ -41,6 +48,9 @@ class AbstractDomainObjectTest extends TestCase
 
     /**
      * Test getter and setter for created_at
+     *
+     * @covers \App\AbstractDomainObject::getCreatedAt
+     * @covers \App\AbstractDomainObject::setCreatedAt
      */
     public function testGetSetCreatedAt()
     {
@@ -52,6 +62,9 @@ class AbstractDomainObjectTest extends TestCase
 
     /**
      * Test getter and setter for updated_at
+     *
+     * @covers \App\AbstractDomainObject::getUpdatedAt
+     * @covers \App\AbstractDomainObject::setUpdatedAt
      */
     public function testGetSetUpdatedAt()
     {

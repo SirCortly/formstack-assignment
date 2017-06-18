@@ -69,6 +69,8 @@ class UserDataMapperTest extends TestCase
 
     /**
      * Test get all Users
+     *
+     * @covers \App\Users\UserDataMapper::fetchAll
      */
     public function testFetchAll()
     {
@@ -93,6 +95,8 @@ class UserDataMapperTest extends TestCase
 
     /**
      * Test get User by ID
+     *
+     * @covers \App\Users\UserDataMapper::fetchById
      */
     public function testFetchById()
     {
@@ -113,6 +117,8 @@ class UserDataMapperTest extends TestCase
     /**
      * Test that exception is thrown if we try to fetch a
      * User by ID that doesn't exist.
+     *
+     * @covers \App\Users\UserDataMapper::fetchById
      */
     public function testFetchByIdNotFoundThrowsException()
     {
@@ -126,6 +132,8 @@ class UserDataMapperTest extends TestCase
 
     /**
      * Test create new User
+     *
+     * @covers \App\Users\UserDataMapper::_create
      */
     public function testCreate()
     {
@@ -165,6 +173,8 @@ class UserDataMapperTest extends TestCase
 
     /**
      * Test update existing User
+     *
+     * @covers \App\Users\UserDataMapper::_update
      */
     public function testUpdate()
     {
@@ -196,6 +206,8 @@ class UserDataMapperTest extends TestCase
 
     /**
      * Test Delete User
+     *
+     * @covers \App\Users\UserDataMapper::delete
      */
     public function testDelete()
     {
@@ -218,6 +230,8 @@ class UserDataMapperTest extends TestCase
 
     /**
      * Test that attempting to delete a User whos Id is null throws exception
+     *
+     * @covers \App\Users\UserDataMapper::delete
      */
     public function testDeleteUserNullIdThrowsException()
     {
@@ -232,6 +246,8 @@ class UserDataMapperTest extends TestCase
 
     /**
      * Test that attempting to delete a User who does not exist throws an exception
+     *
+     * @covers \App\Users\UserDataMapper::delete
      */
     public function testDeleteUserWhoDoesNotExistThrowsException()
     {

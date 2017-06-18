@@ -83,6 +83,8 @@ class UsersTest extends TestCase
 
     /**
      * Test GET /users
+     *
+     * @coversNothing
      */
     public function testGetUsers()
     {
@@ -143,6 +145,8 @@ class UsersTest extends TestCase
 
     /**
      * Test GET /users/{id}
+     *
+     * @coversNothing
      */
     public function testGetUsersById()
     {
@@ -174,6 +178,8 @@ class UsersTest extends TestCase
 
     /**
      * Test GET /users/{id} where {id} does not exist
+     *
+     * @coversNothing
      */
     public function testGetUsersByIdDoesNotExist()
     {
@@ -196,6 +202,8 @@ class UsersTest extends TestCase
 
     /**
      * Test POST /users
+     *
+     * @coversNothing
      */
     public function testPostUser()
     {
@@ -232,6 +240,8 @@ class UsersTest extends TestCase
 
     /**
      * Test POSTing user with empty body returns error
+     *
+     * @coversNothing
      */
     public function testPostUserMissingParams()
     {
@@ -256,6 +266,8 @@ class UsersTest extends TestCase
 
     /**
      * Test PUT /users/{id}
+     *
+     * @coversNothing
      */
     public function testPutUser()
     {
@@ -280,6 +292,8 @@ class UsersTest extends TestCase
 
     /**
      * Test PUT /users/{id} with invalid email returns 422 response
+     *
+     * @coversNothing
      */
     public function testPutUserInvalidEmail()
     {
@@ -306,6 +320,8 @@ class UsersTest extends TestCase
 
     /**
      * Test DELETE /users/{id}
+     *
+     * @coversNothing
      */
     public function testDelete()
     {
@@ -332,6 +348,8 @@ class UsersTest extends TestCase
 
     /**
      * Test DELETE /users/{id} not found returns 404
+     *
+     * @coversNothing
      */
     public function testDeleteNotFound()
     {

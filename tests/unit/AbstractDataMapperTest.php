@@ -6,7 +6,22 @@ use App\{AbstractDomainObject, AbstractDataMapper};
 class AbstractDataMapperTest extends TestCase
 {
     /**
+     * Test that constructor accepts PDO as parameter
+     *
+     * @covers \App\AbstractDataMapper::__construct
+     */
+    public function testConstruct()
+    {
+        $pdo = $this->createMock(\PDO::class);
+        $mapper = $this->getMockForAbstractClass(AbstractDataMapper::class, [$pdo]);
+
+        $this->assertInstanceOf(AbstractDataMapper::class, $mapper);
+    }
+
+    /**
      * Calling save() with and object where id is null will call _create
+     *
+     * @covers \App\AbstractDataMapper::save
      */
     public function testSaveObjectWithNullIdCallsCreate()
     {
@@ -26,6 +41,8 @@ class AbstractDataMapperTest extends TestCase
 
     /**
      * Calling save() with an object where id is set will call _update
+     *
+     * @covers \App\AbstractDataMapper::save
      */
     public function testSaveObjectWithIdCallsUpdate()
     {
