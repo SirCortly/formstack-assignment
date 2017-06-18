@@ -193,4 +193,39 @@ class UsersTest extends TestCase
             $this->assertEquals($error_expectation, $error);
         }
     }
+
+    /**
+     * Test POST /users
+     */
+    public function testPostUser()
+    {
+        $post_data = [
+            'email' => 'kurt.cobain@nirvana.com',
+            'password' => 'nirvana',
+            'firstname' => 'Kurt',
+            'lastname' => 'Cobain'
+        ];
+
+        // POST /users
+        $response = $this->http->post('/users', ['json' => $post_data]);
+
+        // Assert response 201 Created
+        $this->assertEquals(201, $response->getStatusCode());
+
+        // Assert Content-Type applciation/json
+        $this->assertEquals(
+            'application/json;charset=utf-8',
+            $response->getHeaders()['Content-Type'][0]
+        );
+
+        // Assert that created User was returned properly
+        $data = json_decode($response->getBody(), true);
+        $this->assertEquals('kurt.cobain@nirvana.com', $data['email']);
+        $this->assertFalse(array_key_exists('password', $data));
+        $this->assertEquals('Kurt', $data['firstname']);
+        $this->assertEquals('Cobain', $data['lastname']);
+        $this->assertEquals('Kurt Cobain', $data['fullname']);
+        $this->assertFalse(is_null($data['created_at']));
+        $this->assertTrue(is_null($data['updated_at']));
+    }
 }
