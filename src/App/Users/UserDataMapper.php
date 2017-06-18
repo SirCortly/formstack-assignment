@@ -165,7 +165,10 @@ class UserDataMapper extends AbstractDataMapper
         $user->setFirstname($row['firstname']);
         $user->setLastname($row['lastname']);
         $user->setCreatedAt(new \DateTime($row['created_at']));
-        $user->setUpdatedAt(new \DateTime($row['updated_at']));
+
+        if ( ! is_null($row['updated_at'])) {
+            $user->setUpdatedAt(new \DateTime($row['updated_at']));
+        }
 
         return $user;
     }
