@@ -36,4 +36,11 @@ abstract class DomainObject
         }
         $this->id = $id;
     }
+
+    /**
+     * Domain Object must define validation for itself
+     *
+     * return array Validation Errors
+     */
+    abstract public function validate() : array;
 }
