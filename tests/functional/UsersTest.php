@@ -267,14 +267,40 @@ class UsersTest extends TestCase
         $put_response = $this->http->put('/users/1', ['json' => $put_data]);
 
         // Assert response 200 OK
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(200, $put_response->getStatusCode());
 
         // GET /users/1
         $get_response = $this->http->get('/users/1');
-        $data = json_decode($put_response->getBody(), true);
+        $data = json_decode($get_response->getBody(), true);
 
         // Assert that User was updated
-        $data = json_decode($response->getBody(), true);
+        $data = json_decode($get_response->getBody(), true);
         $this->assertEquals('kurt.cobain@nirvana.com', $data['email']);
+    }
+
+    /**
+     * Test PUT /users/{id} with invalid email returns 422 response
+     */
+    public function testPutUserInvalidEmail()
+    {
+        $put_data = [
+            'email' => 'notanemail'
+        ];
+
+        // PUT /users/1
+        try {
+            $this->http->put('/users/1', ['json' => $put_data]);
+        } catch (GuzzleHttp\Exception\ClientException $e) {
+            $response = $e->getResponse();
+
+            $this->assertEquals(422, $response->getStatusCode());
+
+            $error = json_decode($response->getBody(), true);
+            $error_expectation = [
+                'email' => 'Email format is invalid',
+            ];
+
+            $this->assertEquals($error_expectation, $error);
+        }
     }
 }
