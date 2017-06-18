@@ -69,4 +69,55 @@ class UserTest extends TestCase
         $full_name = $user->getFullName();
         $this->assertEquals('Kurt Russell', $full_name);
     }
+
+    /**
+     * Test that validation returns empty array on valid User
+     */
+    public function testValidateSuccess()
+    {
+        $user = new User();
+        $user->setEmail('kurt@russell.com');
+        $user->setPassword('wherewereyouchilds');
+        $user->setFirstname('Kurt');
+        $user->setFirstname('Russell');
+
+        $validation_errors = $user->validate();
+
+        $this->assertEquals([], $validation_errors);
+    }
+
+    /**
+     * Test that validation returns errors on invalid email
+     */
+    public function testValidateInvalidEmail()
+    {
+        $user = new User();
+        $user->setEmail('kurtrussell.com');
+        $user->setPassword('wherewereyouchilds');
+        $user->setFirstname('Kurt');
+        $user->setFirstname('Russell');
+
+        $validation_errors = $user->validate();
+
+        $this->assertEquals([
+            'email' => 'Email format is invalid'
+        ], $validation_errors);
+    }
+
+    /**
+     * Test that validation returns errors when required fields are missing
+     */
+    public function testValidateRequiredFields()
+    {
+        $user = new User();
+
+        $validation_errors = $user->validate();
+
+        $this->assertEquals([
+            'email' => 'Email is required',
+            'password' => 'Password is required',
+            'firstname' => 'Firstname is required',
+            'lastname' => 'Lastname is required'
+        ], $validation_errors);
+    }
 }
