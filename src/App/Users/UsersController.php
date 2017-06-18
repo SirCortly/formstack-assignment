@@ -3,10 +3,35 @@ namespace App\Users;
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-use App\AbstractController;
+use App\{
+    AbstractDataMapper,
+    AbstractViewTransformer
+};
 
-class UsersController extends AbstractController
+class UsersController
 {
+    /**
+     * @var AbstractDataMapper User Data Mapper
+     */
+    protected $user_mapper;
+
+    /**
+     * @var AbstractViewTransformer User View Transformer
+     */
+    protected $user_transformer;
+
+    /**
+     * Constructor
+     */
+    public function __construct(
+        AbstractDataMapper $user_mapper,
+        AbstractViewTransformer $user_transformer
+    )
+    {
+        $this->user_mapper = $user_mapper;
+        $this->user_transformer = $user_transformer;
+    }
+
     /**
      * GET /users
      *
@@ -19,13 +44,10 @@ class UsersController extends AbstractController
      */
     public function index(Request $request, Response $response)
     {
-        $mapper = new UserDataMapper($this->container->get('db'));
-        $users = $mapper->fetchAll();
-
-        $transformer = new UserViewTransformer();
+        $users = $this->user_mapper->fetchAll();
 
         return $response->withJson(
-            $transformer->transformCollection($users),
+            $this->user_transformer->transformCollection($users),
             200
         );
     }
@@ -44,18 +66,15 @@ class UsersController extends AbstractController
     public function show(Request $request, Response $response, $args)
     {
         $id = $args['id'];
-        $mapper = new UserDataMapper($this->container->get('db'));
 
         try {
-            $user = $mapper->fetchById($id);
+            $user = $this->user_mapper->fetchById($id);
         } catch(\Exception $e) {
             return $response->withJson(['message' => $e->getMessage()], 404);
         }
 
-        $transformer = new UserViewTransformer();
-
         return $response->withJson(
-            $transformer->transform($user),
+            $this->user_transformer->transform($user),
             200
         );
     }
@@ -72,7 +91,6 @@ class UsersController extends AbstractController
      */
     public function create(Request $request, Response $response)
     {
-        $mapper = new UserDataMapper($this->container->get('db'));
         $user = $this->_populateUserFromRequestBody($request, new User());
 
         $validation_errors = $user->validate();
@@ -83,12 +101,10 @@ class UsersController extends AbstractController
             );
         }
 
-        $id = $mapper->save($user);
-
-        $transformer = new UserViewTransformer();
+        $id = $this->user_mapper->save($user);
 
         return $response->withJson(
-            $transformer->transform($mapper->fetchById($id)),
+            $this->user_transformer->transform($this->user_mapper->fetchById($id)),
             201
         );
     }
@@ -107,10 +123,9 @@ class UsersController extends AbstractController
     public function update(Request $request, Response $response, $args)
     {
         $id = $args['id'];
-        $mapper = new UserDataMapper($this->container->get('db'));
 
         try {
-            $user = $mapper->fetchById($id);
+            $user = $this->user_mapper->fetchById($id);
         } catch(\Exception $e) {
             return $response->withJson(['message' => $e->getMessage()], 404);
         }
@@ -126,7 +141,7 @@ class UsersController extends AbstractController
             );
         }
 
-        $mapper->save($user);
+        $this->user_mapper->save($user);
 
         return $response->withStatus(200);
     }
@@ -145,15 +160,14 @@ class UsersController extends AbstractController
     public function delete(Request $request, Response $response, $args)
     {
         $id = $args['id'];
-        $mapper = new UserDataMapper($this->container->get('db'));
 
         try {
-            $user = $mapper->fetchById($id);
+            $user = $this->user_mapper->fetchById($id);
         } catch(\Exception $e) {
             return $response->withJson(['message' => $e->getMessage()], 404);
         }
 
-        $mapper->delete($user);
+        $this->user_mapper->delete($user);
         return $response->withStatus(200);
     }
 
