@@ -160,15 +160,13 @@ class UsersTest extends TestCase
 
         $data = json_decode($response->getBody(), true);
         $data_expectation = [
-            [
-                'id' => 2,
-                'email' => 'george.harrison@beatles.com',
-                'firstname' => 'George',
-                'lastname' => 'Harrison',
-                'fullname' => 'George Harrison',
-                'created_at' => '2017-06-18 00:00:00',
-                'updated_at' => null
-            ]
+            'id' => 2,
+            'email' => 'george.harrison@beatles.com',
+            'firstname' => 'George',
+            'lastname' => 'Harrison',
+            'fullname' => 'George Harrison',
+            'created_at' => '2017-06-18 00:00:00',
+            'updated_at' => null
         ];
 
         $this->assertEquals($data_expectation, $data);
@@ -180,16 +178,19 @@ class UsersTest extends TestCase
     public function testGetUsersByIdDoesNotExist()
     {
         // GET /users/2
-        $response = $this->http->get('/users/1234');
+        try {
+            $this->http->get('/users/1234');
+        } catch (GuzzleHttp\Exception\ClientException $e) {
+            $response = $e->getResponse();
 
-        // Assert response 404 Not Found
-        $this->assertEquals(404, $response->getStatusCode());
+            $this->assertEquals(404, $response->getStatusCode());
 
-        $error = json_decode($response->getBody(), true);
-        $error_expectation = [
-            'message' => 'User not found'
-        ];
+            $error = json_decode($response->getBody(), true);
+            $error_expectation = [
+                'message' => 'User not found'
+            ];
 
-        $this->assertEquals($error_expectation, $error);
+            $this->assertEquals($error_expectation, $error);
+        }
     }
 }

@@ -8,7 +8,7 @@ use App\AbstractController;
 class UsersController extends AbstractController
 {
     /**
-     * Index method for GET /users
+     * GET /users
      *
      * Return a list of Users
      *
@@ -26,6 +26,36 @@ class UsersController extends AbstractController
 
         return $response->withJson(
             $transformer->transformCollection($users),
+            200
+        );
+    }
+
+    /**
+     *  GET /users{id}
+     *
+     * Return a single User by ID
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param array $args
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function show(Request $request, Response $response, $args)
+    {
+        $id = $args['id'];
+        $mapper = new UserDataMapper($this->container->get('db'));
+
+        try {
+            $user = $mapper->fetchById($id);
+        } catch(\Exception $e) {
+            return $response->withJson(['message' => $e->getMessage()], 404);
+        }
+
+        $transformer = new UserViewTransformer();
+
+        return $response->withJson(
+            $transformer->transform($user),
             200
         );
     }
