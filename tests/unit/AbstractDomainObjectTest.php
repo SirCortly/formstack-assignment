@@ -1,17 +1,16 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use App\DomainObject;
-use Exception;
+use App\AbstractDomainObject;
 
-class DomainObjectTest extends TestCase
+class AbstractDomainObjectTest extends TestCase
 {
     /**
      * Test that object is initialized with $id = null;
      */
     public function testIdInitiallyNull()
     {
-        $domain_object = $this->getMockForAbstractClass(DomainObject::class);
+        $domain_object = $this->getMockForAbstractClass(AbstractDomainObject::class);
 
         $this->assertNull($domain_object->getId());
     }
@@ -21,7 +20,7 @@ class DomainObjectTest extends TestCase
      */
     public function testSetGetID()
     {
-        $domain_object = $this->getMockForAbstractClass(DomainObject::class);
+        $domain_object = $this->getMockForAbstractClass(AbstractDomainObject::class);
         $domain_object->setId(101);
 
         $this->assertEquals(101, $domain_object->getId());
@@ -34,7 +33,7 @@ class DomainObjectTest extends TestCase
     {
         $this->expectException(Exception::class);
 
-        $domain_object = $this->getMockForAbstractClass(DomainObject::class);
+        $domain_object = $this->getMockForAbstractClass(AbstractDomainObject::class);
 
         $domain_object->setId(101);
         $domain_object->setId(102);

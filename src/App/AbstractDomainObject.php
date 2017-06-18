@@ -3,7 +3,7 @@ namespace App;
 
 use Exception;
 
-abstract class DomainObject
+abstract class AbstractDomainObject
 {
     /**
      * @var int ID of Domain Object

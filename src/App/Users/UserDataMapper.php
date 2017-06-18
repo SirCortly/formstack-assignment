@@ -2,10 +2,10 @@
 namespace App\Users;
 
 use PDO;
-use App\{DomainObject, DataMapper};
+use App\{AbstractDomainObject, AbstractDataMapper};
 use App\Users\User;
 
-class UserDataMapper extends DataMapper
+class UserDataMapper extends AbstractDataMapper
 {
     /**
      * @var string Basic SELECT FROM query for users
@@ -44,9 +44,9 @@ class UserDataMapper extends DataMapper
      *
      * @param int $id Id of User
      *
-     * @return DomainObject
+     * @return AbstractDomainObject
      */
-    public function fetchById(int $id) : DomainObject
+    public function fetchById(int $id) : AbstractDomainObject
     {
         // Append WHERE clause to $this->select_from and execute query
         $stmt = $this->db->prepare(
@@ -68,11 +68,11 @@ class UserDataMapper extends DataMapper
     /**
      * Delete User
      *
-     * @param DomainObject $user User to delete
+     * @param AbstractDomainObject $user User to delete
      *
      * @return void
      */
-    public function delete(DomainObject $user)
+    public function delete(AbstractDomainObject $user)
     {
         if (is_null($user->getId())) {
             throw new \Exception('Cannot delete user where ID is null');
@@ -92,11 +92,11 @@ class UserDataMapper extends DataMapper
     /**
      * Create new User
      *
-     * @param DomainObject $user User to create
+     * @param AbstractDomainObject $user User to create
      *
      * @return int New User ID
      */
-    protected function _create(DomainObject $user) : int
+    protected function _create(AbstractDomainObject $user) : int
     {
         $stmt = $this->db->prepare("
             INSERT INTO `users` (
@@ -119,11 +119,11 @@ class UserDataMapper extends DataMapper
     /**
      * Update existing User
      *
-     * @param DomainObject $user User to updated
+     * @param AbstractDomainObject $user User to updated
      *
      * @return int Updated User ID
      */
-    protected function _update(DomainObject $user) : int
+    protected function _update(AbstractDomainObject $user) : int
     {
         $stmt = $this->db->prepare("
             UPDATE `users`

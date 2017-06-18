@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-abstract class DataMapper
+abstract class AbstractDataMapper
 {
     /**
      * PDO connection
@@ -19,17 +19,17 @@ abstract class DataMapper
     }
 
     /**
-     * Persist DomainObject to storage
+     * Persist AbstractDomainObject to storage
      *
      * Determine whether an object should be created or updated
      * and act accordingly.
      *
-     * @param DomainObject $entity Object to persist
+     * @param AbstractDomainObject $entity Object to persist
      *
      * @return int ID of persisted object
      *
      */
-    public function save(DomainObject $entity) : int
+    public function save(AbstractDomainObject $entity) : int
     {
         if (is_null($entity->getId())) {
             return $this->_create($entity);
@@ -38,43 +38,43 @@ abstract class DataMapper
     }
 
     /**
-     * Get all instances of DomainObject type
+     * Get all instances of AbstractDomainObject type
      *
-     * @return DomainObject[]
+     * @return AbstractDomainObject[]
      */
     abstract public function fetchAll() : array;
 
     /**
-     * Get a specific instance of DomainObject by ID
+     * Get a specific instance of AbstractDomainObject by ID
      *
-     * @return DomainObject
+     * @return AbstractDomainObject
      */
-    abstract public function fetchById(int $id) : DomainObject;
+    abstract public function fetchById(int $id) : AbstractDomainObject;
 
     /**
      * Delete object from storage
      *
-     * @param DomainObject $entity Object to delete
+     * @param AbstractDomainObject $entity Object to delete
      *
      * @return void
      */
-    abstract public function delete(DomainObject $entity);
+    abstract public function delete(AbstractDomainObject $entity);
 
     /**
      * Persist new object to storage
      *
-     * @param DomainObject $entity Object to create
+     * @param AbstractDomainObject $entity Object to create
      *
      * @return int ID of newly created object
      */
-    abstract protected function _create(DomainObject $entity) : int;
+    abstract protected function _create(AbstractDomainObject $entity) : int;
 
     /**
      * Update existing object in storage
      *
-     * @param DomainObject $entity Object to update
+     * @param AbstractDomainObject $entity Object to update
      *
      * @return int ID of updated object
      */
-    abstract protected function _update(DomainObject $entity) : int;
+    abstract protected function _update(AbstractDomainObject $entity) : int;
 }

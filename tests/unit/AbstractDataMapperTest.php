@@ -1,19 +1,19 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use App\{DomainObject, DataMapper};
+use App\{AbstractDomainObject, AbstractDataMapper};
 
-class DataMapperTest extends TestCase
+class AbstractDataMapperTest extends TestCase
 {
     /**
      * Calling save() with and object where id is null will call _create
      */
     public function testSaveObjectWithNullIdCallsCreate()
     {
-        $object = $this->getMockForAbstractClass(DomainObject::class);
+        $object = $this->getMockForAbstractClass(AbstractDomainObject::class);
 
         $pdo = $this->createMock(\PDO::class);
-        $mapper = $this->getMockForAbstractClass(DataMapper::class, [$pdo]);
+        $mapper = $this->getMockForAbstractClass(AbstractDataMapper::class, [$pdo]);
 
         // We should expect _create to be called
         $mapper->expects($this->once())
@@ -29,10 +29,10 @@ class DataMapperTest extends TestCase
      */
     public function testSaveObjectWithIdCallsUpdate()
     {
-        $object = $this->getMockForAbstractClass(DomainObject::class);
+        $object = $this->getMockForAbstractClass(AbstractDomainObject::class);
 
         $pdo = $this->createMock(\PDO::class);
-        $mapper = $this->getMockForAbstractClass(DataMapper::class, [$pdo]);
+        $mapper = $this->getMockForAbstractClass(AbstractDataMapper::class, [$pdo]);
 
         $object->setId(101);
 

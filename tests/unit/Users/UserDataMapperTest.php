@@ -3,7 +3,7 @@
 use PHPUnit\Framework\TestCase;
 
 use App\Users\{User, UserDataMapper};
-use App\DataMapper;
+use App\AbstractDataMapper;
 
 class UserDataMapperTest extends TestCase
 {

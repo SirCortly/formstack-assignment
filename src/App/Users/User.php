@@ -1,9 +1,9 @@
 <?php
 namespace App\Users;
 
-use App\DomainObject;
+use App\AbstractDomainObject;;
 
-class User extends DomainObject
+class User extends AbstractDomainObject
 {
     /**
      * @var string Email Address
