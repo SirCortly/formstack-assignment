@@ -253,4 +253,28 @@ class UsersTest extends TestCase
             $this->assertEquals($error_expectation, $error);
         }
     }
+
+    /**
+     * Test PUT /users/{id}
+     */
+    public function testPutUser()
+    {
+        $put_data = [
+            'email' => 'kurt.cobain@nirvana.com'
+        ];
+
+        // PUT /users/1
+        $put_response = $this->http->put('/users/1', ['json' => $put_data]);
+
+        // Assert response 200 OK
+        $this->assertEquals(200, $response->getStatusCode());
+
+        // GET /users/1
+        $get_response = $this->http->get('/users/1');
+        $data = json_decode($put_response->getBody(), true);
+
+        // Assert that User was updated
+        $data = json_decode($response->getBody(), true);
+        $this->assertEquals('kurt.cobain@nirvana.com', $data['email']);
+    }
 }
