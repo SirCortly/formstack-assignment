@@ -64,6 +64,7 @@ class UserDataMapperTest extends TestCase
     {
         // Truncate table
         $this->pdo->exec("TRUNCATE TABLE `users`;");
+        $this->pdo = null;
     }
 
     /**
