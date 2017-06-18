@@ -81,6 +81,9 @@ class UsersTest extends TestCase
         $this->pdo = null;
     }
 
+    /**
+     * Test GET /users
+     */
     public function testGetUsers()
     {
         // GET /users
@@ -136,5 +139,57 @@ class UsersTest extends TestCase
         ];
 
         $this->assertEquals($data_expectation, $data);
+    }
+
+    /**
+     * Test GET /users/{id}
+     */
+    public function testGetUsersById()
+    {
+        // GET /users/2
+        $response = $this->http->get('/users/2');
+
+        // Assert response 200 OK
+        $this->assertEquals(200, $response->getStatusCode());
+
+        // Assert Content-Type applciation/json
+        $this->assertEquals(
+            'application/json;charset=utf-8',
+            $response->getHeaders()['Content-Type'][0]
+        );
+
+        $data = json_decode($response->getBody(), true);
+        $data_expectation = [
+            [
+                'id' => 2,
+                'email' => 'george.harrison@beatles.com',
+                'firstname' => 'George',
+                'lastname' => 'Harrison',
+                'fullname' => 'George Harrison',
+                'created_at' => '2017-06-18 00:00:00',
+                'updated_at' => null
+            ]
+        ];
+
+        $this->assertEquals($data_expectation, $data);
+    }
+
+    /**
+     * Test GET /users/{id} where {id} does not exist
+     */
+    public function testGetUsersByIdDoesNotExist()
+    {
+        // GET /users/2
+        $response = $this->http->get('/users/1234');
+
+        // Assert response 404 Not Found
+        $this->assertEquals(404, $response->getStatusCode());
+
+        $error = json_decode($response->getBody(), true);
+        $error_expectation = [
+            'message' => 'User not found'
+        ];
+
+        $this->assertEquals($error_expectation, $error);
     }
 }
