@@ -38,4 +38,26 @@ class AbstractDomainObjectTest extends TestCase
         $domain_object->setId(101);
         $domain_object->setId(102);
     }
+
+    /**
+     * Test getter and setter for created_at
+     */
+    public function testGetSetCreatedAt()
+    {
+        $domain_object = $this->getMockForAbstractClass(AbstractDomainObject::class);
+        $domain_object->setCreatedAt(new \DateTime('NOW'));
+
+        $this->assertInstanceOf(\DateTime::class, $domain_object->getCreatedAt());
+    }
+
+    /**
+     * Test getter and setter for updated_at
+     */
+    public function testGetSetUpdatedAt()
+    {
+        $domain_object = $this->getMockForAbstractClass(AbstractDomainObject::class);
+        $domain_object->setUpdatedAt(new \DateTime('NOW'));
+
+        $this->assertInstanceOf(\DateTime::class, $domain_object->getUpdatedAt());
+    }
 }

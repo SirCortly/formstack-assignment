@@ -11,6 +11,16 @@ abstract class AbstractDomainObject
     protected $id = null;
 
     /**
+     * @var DateTime When object was created
+     */
+    protected $created_at = null;
+
+    /**
+     * @var DateTime When object was last updated
+     */
+    protected $updated_at = null;
+
+    /**
      * Get ID of object (Unique to object type)
      *
      * @return int
@@ -35,6 +45,46 @@ abstract class AbstractDomainObject
             throw new Exception('DomainObject ID is immutable');
         }
         $this->id = $id;
+    }
+
+    /**
+     * Get Created At
+     *
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Set Created At
+     *
+     * @param DateTime $created_at
+     */
+    public function setCreatedAt(\DateTime $created_at)
+    {
+        $this->created_at = $created_at;
+    }
+
+    /**
+     * Get Updated At
+     *
+     * @return DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * Set Updated At
+     *
+     * @param DateTime $updated_at
+     */
+    public function setUpdatedAt(\DateTime $updated_at)
+    {
+        $this->updated_at = $updated_at;
     }
 
     /**

@@ -16,7 +16,9 @@ class UserViewTransformer extends AbstractViewTransformer
             'email' => $user->getEmail(),
             'firstname' => $user->getFirstname(),
             'lastname' => $user->getLastname(),
-            'fullname' => $user->getFullName()
+            'fullname' => $user->getFullName(),
+            'created_at' => $user->getCreatedAt()->format('Y-m-d H:i:s'),
+            'updated_at' => $user->getUpdatedAt()->format('Y-m-d H:i:s')
         ];
     }
 }
