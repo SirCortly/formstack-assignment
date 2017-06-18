@@ -71,6 +71,7 @@ class UserDataMapperTest extends TestCase
      * Test get all Users
      *
      * @covers \App\Users\UserDataMapper::fetchAll
+     * @covers \App\Users\UserDataMapper::_populate
      */
     public function testFetchAll()
     {
@@ -97,6 +98,7 @@ class UserDataMapperTest extends TestCase
      * Test get User by ID
      *
      * @covers \App\Users\UserDataMapper::fetchById
+     * @covers \App\Users\UserDataMapper::_populate
      */
     public function testFetchById()
     {
