@@ -12,6 +12,6 @@ define('BASE_PATH', __DIR__);
 // Require Composer Autoload
 require BASE_PATH . '/vendor/autoload.php';
 
-// Require
+// Require App Server
 require BASE_PATH . '/src/server.php';
 
