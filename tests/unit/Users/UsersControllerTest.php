@@ -209,7 +209,7 @@ class UsersControllerTest extends TestCase
     /**
      * Test create with invalid input
      *
-    * @covers \App\Users\UsersController::create
+     * @covers \App\Users\UsersController::create
      */
     public function testCreateValidationErrors()
     {
@@ -222,6 +222,115 @@ class UsersControllerTest extends TestCase
         $body = new RequestBody();
 
         $request = new Request('POST', $uri, $headers, [], $serverParams, $body, $uploadedFiles);
+        $response = new Response();
+
+        $response = $this->controller->create($request, $response);
+        $this->assertEquals(422, $response->getStatusCode());
+    }
+
+    /**
+     * Test update method
+     *
+     * @covers \App\Users\UsersController::update
+     */
+    public function testUpdate()
+    {
+        // Mock Environment
+        $env = Environment::mock();
+        $uri = Uri::createFromString('/users/101');
+        $headers = Headers::createFromEnvironment($env);
+        $serverParams = $env->all();
+        $uploadedFiles = UploadedFile::createFromEnvironment($env);
+        $body = new RequestBody();
+
+        $request = new Request('PUT', $uri, $headers, [], $serverParams, $body, $uploadedFiles);
+        $request->getBody()->write(json_encode([
+            'email' => 'new@email.com'
+        ]));
+        $request->getBody()->rewind();
+        $response = new Response();
+        $args = ['id' => 101];
+
+        $user = new User();
+        $user->setId(101);
+        $user->setEmail('test@email.com');
+        $user->setPassword('test');
+        $user->setFirstname('New');
+        $user->setLastname('User');
+
+        // Expect $user_mapper->fetchById() to be called once
+        $this->user_mapper->expects($this->once())
+            ->method('fetchById')
+            ->with($this->equalTo(101))
+            ->will($this->returnValue($user));
+
+        $updated_user = new User();
+        $updated_user->setId(101);
+        $updated_user->setEmail('new@email.com');
+        $updated_user->setPassword('test');
+        $updated_user->setFirstname('New');
+        $updated_user->setLastname('User');
+
+        // Expect $user_mapper->save() to be called once with $user
+        $this->user_mapper->expects($this->once())
+            ->method('save')
+            ->with($this->equalTo($updated_user))
+            ->will($this->returnValue(101));
+
+        $response = $this->controller->update($request, $response, $args);
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    /**
+     * Test update where ID is not found
+     *
+    * @covers \App\Users\UsersController::update
+    * @covers \App\Users\UsersController::_respondUserNotFound
+     */
+    public function testUpdateUserNotFound()
+    {
+        // Mock environment
+        $environment = \Slim\Http\Environment::mock([
+            'REQUEST_METHOD' => 'PUT',
+            'REQUEST_URI' => '/users/101'
+        ]);
+        $request = \Slim\Http\Request::createFromEnvironment($environment);
+        $response = new \Slim\Http\Response();
+        $args = ['id' => 101];
+
+        // Expect $user_mapper->fetchById() to be called once and throw exception
+        $this->user_mapper->expects($this->once())
+            ->method('fetchById')
+            ->with($this->equalTo(101))
+            ->will($this->throwException(new \Exception));
+
+        $response = $this->controller->update($request, $response, $args);
+
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertEquals(['message' => 'User not found'], json_decode($response->getBody(), true));
+    }
+
+    /**
+     * Test create with invalid input
+     *
+     * @covers \App\Users\UsersController::update
+     */
+    public function testUpdateValidationErrors()
+    {
+        // Mock Environment
+        $env = Environment::mock();
+        $uri = Uri::createFromString('/users');
+        $headers = Headers::createFromEnvironment($env);
+        $serverParams = $env->all();
+        $uploadedFiles = UploadedFile::createFromEnvironment($env);
+        $body = new RequestBody();
+
+        $request = new Request('POST', $uri, $headers, [], $serverParams, $body, $uploadedFiles);
+        $request->getBody()->write(json_encode([
+            'email' => 'notanemail'
+        ]));
+        $request->getBody()->rewind();
         $response = new Response();
 
         $response = $this->controller->create($request, $response);
