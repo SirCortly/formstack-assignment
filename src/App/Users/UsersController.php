@@ -70,7 +70,7 @@ class UsersController
         try {
             $user = $this->user_mapper->fetchById($id);
         } catch(\Exception $e) {
-            return $response->withJson(['message' => 'User not found'], 404);
+            return $this->_respondUserNotFound($response);
         }
 
         return $response->withJson(
@@ -127,7 +127,7 @@ class UsersController
         try {
             $user = $this->user_mapper->fetchById($id);
         } catch(\Exception $e) {
-            return $response->withJson(['message' => $e->getMessage()], 404);
+            return $this->_respondUserNotFound($response);
         }
 
         // Update user based on request body
@@ -164,7 +164,7 @@ class UsersController
         try {
             $user = $this->user_mapper->fetchById($id);
         } catch(\Exception $e) {
-            return $response->withJson(['message' => $e->getMessage()], 404);
+            return $this->_respondUserNotFound($response);
         }
 
         $this->user_mapper->delete($user);
@@ -177,10 +177,12 @@ class UsersController
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @param User $user
+     *
+     * @return User
      */
-    private function _populateUserFromRequestBody(Request $request, User $user)
+    private function _populateUserFromRequestBody(Request $request, User $user) : User
     {
-        $data = $request->getParsedBody();
+        $data = json_decode($request->getBody()->getContents(), true);
 
         isset($data['email']) ? $user->setEmail($data['email']) : '';
         isset($data['password']) ? $user->setPassword($data['password']) : '';
@@ -188,5 +190,17 @@ class UsersController
         isset($data['lastname']) ? $user->setLastname($data['lastname']) : '';
 
         return $user;
+    }
+
+    /**
+     * Respond with User not found error
+     *
+     * @param \Psr\Http\Message\ResponseInterface $response
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    private function _respondUserNotFound(Response $response) : Response
+    {
+        return $response->withJson(['message' => 'User not found'], 404);
     }
 }
